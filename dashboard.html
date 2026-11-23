@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07111f">
+  <title>Michael.dev | Dashboard Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: rgba(13, 22, 40, 0.78);
+      --card-solid: #0d1729;
+      --text: #f7fbff;
+      --muted: #9eacc0;
+      --line: rgba(255, 255, 255, 0.09);
+      --primary: #22d3ee;
+      --primary-2: #8b5cf6;
+      --success: #34d399;
+      --danger: #fb7185;
+      --warning: #fbbf24;
+      --shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+      --radius: 20px;
+      --container: min(1140px, 92%);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(34, 211, 238, 0.10), transparent 28%),
+        radial-gradient(circle at 85% 25%, rgba(139, 92, 246, 0.11), transparent 30%),
+        linear-gradient(180deg, #050816 0%, #07101e 55%, #050816 100%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed; inset: 0; pointer-events: none; z-index: -1;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .container { width: var(--container); margin-inline: auto; }
+    [hidden] { display: none !important; }
+
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(5, 8, 22, 0.8);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+    nav {
+      min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .logo { font: 800 1.55rem Outfit, sans-serif; letter-spacing: -0.04em; display: flex; align-items: center; gap: 10px; }
+    .logo span { color: var(--primary); }
+    .badge-admin {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(34, 211, 238, 0.12); color: var(--primary); border: 1px solid rgba(34, 211, 238, 0.25);
+    }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    /* BOTÕES */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: 0; border-radius: 12px; padding: 11px 16px; font-weight: 700; font-size: 0.9rem;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn svg { width: 17px; height: 17px; }
+    .btn-primary { color: #031019; background: linear-gradient(135deg, var(--primary), #67e8f9); }
+    .btn-secondary { color: #e9f2fb; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line); }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+    .btn-danger { color: #ffe4e6; background: rgba(251, 113, 133, 0.15); border: 1px solid rgba(251, 113, 133, 0.3); }
+    .btn-danger:hover { background: rgba(251, 113, 133, 0.25); }
+    .btn-warning { color: #fef3c7; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); }
+    .btn-sm { padding: 7px 11px; font-size: 0.8rem; border-radius: 9px; }
+
+    /* LOGIN */
+    .login-wrapper {
+      min-height: calc(100vh - 76px); display: grid; place-items: center; padding: 40px 0;
+    }
+    .login-card {
+      width: min(440px, 92%); padding: 36px; border-radius: 26px;
+      border: 1px solid var(--line); background: var(--card); box-shadow: var(--shadow);
+    }
+    .login-card h1 { font: 800 1.9rem Outfit, sans-serif; margin-bottom: 8px; }
+    .login-card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 24px; }
+
+    /* FORMULÁRIOS */
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.84rem; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 12px 14px; border-radius: 12px;
+      border: 1px solid var(--line); background: rgba(5, 8, 22, 0.65);
+      color: var(--text); outline: none; transition: 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--primary); box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+    }
+    .form-hint { font-size: 0.76rem; color: var(--muted); margin-top: 4px; display: block; }
+
+    /* TABS E PAINEL */
+    main { padding: 40px 0 80px; }
+    .tabs {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px;
+      border-bottom: 1px solid var(--line); padding-bottom: 16px;
+    }
+    .tab-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px; border-radius: 12px; border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03); color: var(--muted); font-weight: 700; font-size: 0.9rem;
+    }
+    .tab-btn.active {
+      background: rgba(34, 211, 238, 0.12); color: var(--primary); border-color: rgba(34, 211, 238, 0.35);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start; }
+    .card {
+      border: 1px solid var(--line); background: var(--card);
+      border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow);
+    }
+    .card h2 { font: 700 1.35rem Outfit, sans-serif; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+    .card h2 svg { color: var(--primary); width: 20px; }
+
+    /* LISTA DE PROJETOS */
+    .project-list { display: grid; gap: 14px; }
+    .project-item {
+      border: 1px solid var(--line); border-radius: 16px; padding: 18px;
+      background: rgba(255, 255, 255, 0.02); display: flex; justify-content: space-between; gap: 16px; align-items: flex-start;
+    }
+    .project-item h3 { font: 700 1.1rem Outfit, sans-serif; color: #fff; }
+    .project-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .tag {
+      font-size: 0.72rem; padding: 3px 8px; border-radius: 6px;
+      background: rgba(34, 211, 238, 0.1); color: var(--primary); border: 1px solid rgba(34, 211, 238, 0.2);
+    }
+    .project-item p { font-size: 0.88rem; color: var(--muted); }
+    .item-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+    /* TABELA DE LEADS */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 14px; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+    th { color: var(--primary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { color: #dce7f5; }
+
+    /* STATUS ALERTS */
+    .status-msg {
+      padding: 12px 16px; border-radius: 12px; font-size: 0.88rem; margin-top: 14px;
+    }
+    .status-msg.error { background: rgba(251, 113, 133, 0.12); color: #fda4af; border: 1px solid rgba(251, 113, 133, 0.3); }
+    .status-msg.success { background: rgba(52, 211, 153, 0.12); color: #6ee7b7; border: 1px solid rgba(52, 211, 153, 0.3); }
+
+    @media (max-width: 900px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .project-item { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="container">
+      <div class="logo">
+        <a href="index.html">Michael<span>.dev</span></a>
+        <span class="badge-admin">Admin</span>
+      </div>
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary btn-sm"><i data-lucide="external-link"></i> Ver Site</a>
+        <button id="logout-btn" class="btn btn-danger btn-sm" hidden><i data-lucide="log-out"></i> Sair</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- TELA DE LOGIN -->
+  <section id="login-view" class="login-wrapper">
+    <div class="login-card">
+      <h1>Acesso Restrito</h1>
+      <p>Entre com sua conta do Supabase para gerenciar projetos, perfil e leads do portfólio.</p>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" required placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;"><i data-lucide="lock"></i> Entrar no Painel</button>
+        <div id="login-status" class="status-msg error" hidden></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- PAINEL PRINCIPAL -->
+  <main id="dashboard-view" class="container" hidden>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="projetos"><i data-lucide="folder-git-2"></i> Projetos (tabela: projeto)</button>
+      <button class="tab-btn" data-tab="usuarios"><i data-lucide="user-cog"></i> Dados do Site (tabela: usuarios)</button>
+      <button class="tab-btn" data-tab="leads"><i data-lucide="inbox"></i> Leads / Contatos (tabela: leads)</button>
+    </div>
+
+    <!-- ABA 1: PROJETOS -->
+    <div id="tab-projetos" class="tab-pane grid-2">
+      <div class="card">
+        <h2><i data-lucide="plus-circle"></i> <span id="form-proj-heading">Novo Projeto</span></h2>
+        <form id="projeto-form">
+          <input type="hidden" id="proj-id">
+          <div class="form-group">
+            <label for="proj-titulo">Título do Projeto *</label>
+            <input type="text" id="proj-titulo" required placeholder="Ex: Portfólio Digital">
+          </div>
+          <div class="form-group">
+            <label for="proj-categoria">Categoria</label>
+            <input type="text" id="proj-categoria" placeholder="Ex: Web, JavaScript, Fullstack">
+          </div>
+          <div class="form-group">
+            <label for="proj-descricao">Descrição *</label>
+            <textarea id="proj-descricao" rows="3" required placeholder="Breve resumo do projeto..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="proj-tags">Tecnologias (separadas por vírgula)</label>
+            <input type="text" id="proj-tags" placeholder="HTML, CSS, JavaScript, Supabase">
+          </div>
+          <div class="form-group">
+            <label for="proj-imagem">URL da Imagem de Capa</label>
+            <input type="url" id="proj-imagem" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label for="proj-link">Link do Projeto (Deploy)</label>
+            <input type="url" id="proj-link" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label for="proj-github">Link do Repositório (GitHub)</label>
+            <input type="url" id="proj-github" placeholder="https://github.com/...">
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-primary" style="flex: 1;"><i data-lucide="save"></i> Salvar Projeto</button>
+            <button type="button" id="cancel-proj-btn" class="btn btn-secondary" hidden>Cancelar</button>
+          </div>
+          <div id="proj-status" class="status-msg" hidden></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2><i data-lucide="layers"></i> Projetos Cadastrados</h2>
+        <div id="projetos-list" class="project-list">
+          <p style="color: var(--muted);">Carregando projetos...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 2: USUÁRIOS / INFORMAÇÕES DO PORTFÓLIO -->
+    <div id="tab-usuarios" class="tab-pane" hidden>
+      <div class="card" style="max-width: 720px;">
+        <h2><i data-lucide="user-check"></i> Editar Informações do Portfólio</h2>
+        <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 20px;">
+          Edite os textos principais, contatos e links exibidos no seu site (salvos na tabela <strong>usuarios</strong>).
+        </p>
+        <form id="usuario-form">
+          <input type="hidden" id="user-id">
+          <div class="form-group">
+            <label for="user-nome">Nome Completo</label>
+            <input type="text" id="user-nome" placeholder="Michael Junio Souza Gonçalves">
+          </div>
+          <div class="form-group">
+            <label for="user-subtitulo">Subtítulo / Cargo</label>
+            <input type="text" id="user-subtitulo" placeholder="Desenvolvimento Web & Interfaces Modernas">
+          </div>
+          <div class="form-group">
+            <label for="user-bio">Sobre Mim / Descrição</label>
+            <textarea id="user-bio" rows="4" placeholder="Sua apresentação pessoal..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="user-whatsapp">WhatsApp (apenas números com DDI/DDD)</label>
+            <input type="text" id="user-whatsapp" placeholder="5533999998749">
+          </div>
+          <div class="form-group">
+            <label for="user-email">E-mail de Contato</label>
+            <input type="email" id="user-email" placeholder="michael@exemplo.com">
+          </div>
+          <div class="form-group">
+            <label for="user-github">Link do GitHub</label>
+            <input type="url" id="user-github" placeholder="https://github.com/...">
+          </div>
+          <div class="form-group">
+            <label for="user-linkedin">Link do LinkedIn</label>
+            <input type="url" id="user-linkedin" placeholder="https://linkedin.com/in/...">
+          </div>
+
+          <button type="submit" class="btn btn-primary"><i data-lucide="check"></i> Salvar Alterações</button>
+          <div id="user-status" class="status-msg" hidden></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ABA 3: LEADS -->
+    <div id="tab-leads" class="tab-pane" hidden>
+      <div class="card">
+        <h2><i data-lucide="mail-open"></i> Mensagens e Leads Recebidos</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>E-mail / Contato</th>
+                <th>Mensagem</th>
+                <th style="text-align: right;">Ação</th>
+              </tr>
+            </thead>
+            <tbody id="leads-list">
+              <tr><td colspan="4" style="color: var(--muted);">Carregando leads...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // =========================================================
+    // CONEXÃO SUPABASE (Mesmas credenciais do seu index.html)
+    // =========================================================
+    const SUPABASE_URL = "https://migwvqkstzgviabwqxko.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_dyE4gLTHIV5DlxXt6UK51A_PGpADnZ6";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // =========================================================
+    // CONTROLE DE SESSÃO E LOGIN
+    // =========================================================
+    const loginView = document.getElementById("login-view");
+    const dashboardView = document.getElementById("dashboard-view");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    async function verificarSessao() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        loginView.hidden = true;
+        dashboardView.hidden = false;
+        logoutBtn.hidden = false;
+        carregarDadosIniciais();
+      } else {
+        loginView.hidden = false;
+        dashboardView.hidden = true;
+        logoutBtn.hidden = true;
+      }
+    }
+
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+      const statusEl = document.getElementById("login-status");
+
+      statusEl.hidden = true;
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        statusEl.textContent = "Erro ao entrar: " + error.message;
+        statusEl.hidden = false;
+      } else {
+        verificarSessao();
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      verificarSessao();
+    });
+
+    // =========================================================
+    // NAVEGAÇÃO ENTRE ABAS
+    // =========================================================
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-pane").forEach(p => p.hidden = true);
+
+        btn.classList.add("active");
+        document.getElementById("tab-" + btn.dataset.tab).hidden = false;
+      });
+    });
+
+    function mostrarFeedback(el, texto, tipo) {
+      el.textContent = texto;
+      el.className = "status-msg " + tipo;
+      el.hidden = false;
+      setTimeout(() => { el.hidden = true; }, 4000);
+    }
+
+    function carregarDadosIniciais() {
+      carregarProjetos();
+      carregarUsuario();
+      carregarLeads();
+    }
+
+    // =========================================================
+    // 1. TABELA "projeto" (CRUD Completo)
+    // =========================================================
+    async function carregarProjetos() {
+      const container = document.getElementById("projetos-list");
+      const { data, error } = await supabaseClient.from("projeto").select("*").order("id", { ascending: false });
+
+      if (error) {
+        container.innerHTML = `<p style="color: var(--danger);">Erro ao carregar: ${error.message}</p>`;
+        return;
+      }
+      if (!data || data.length === 0) {
+        container.innerHTML = `<p style="color: var(--muted);">Nenhum projeto cadastrado ainda.</p>`;
+        return;
+      }
+
+      container.innerHTML = data.map(p => {
+        const tagsHtml = (p.tags || "").split(",").filter(Boolean).map(t => `<span class="tag">${t.trim()}</span>`).join("");
+        return `
+          <div class="project-item">
+            <div>
+              <h3>${p.titulo || "Sem título"} <small style="color: var(--primary); font-weight: 500;">${p.categoria ? "• " + p.categoria : ""}</small></h3>
+              <p style="margin-top: 6px;">${p.descricao || ""}</p>
+              <div class="project-meta">${tagsHtml}</div>
+            </div>
+            <div class="item-actions">
+              <button class="btn btn-warning btn-sm" onclick='prepararEdicaoProjeto(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Editar</button>
+              <button class="btn btn-danger btn-sm" onclick="excluirProjeto(${p.id})">Excluir</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    document.getElementById("projeto-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("proj-id").value;
+      const statusEl = document.getElementById("proj-status");
+
+      const payload = {
+        titulo: document.getElementById("proj-titulo").value.trim(),
+        categoria: document.getElementById("proj-categoria").value.trim(),
+        descricao: document.getElementById("proj-descricao").value.trim(),
+        tags: document.getElementById("proj-tags").value.trim(),
+        imagem_url: document.getElementById("proj-imagem").value.trim(),
+        link: document.getElementById("proj-link").value.trim(),
+        github: document.getElementById("proj-github").value.trim()
+      };
+
+      let error;
+      if (id) {
+        ({ error } = await supabaseClient.from("projeto").update(payload).eq("id", id));
+      } else {
+        ({ error } = await supabaseClient.from("projeto").insert([payload]));
+      }
+
+      if (error) {
+        mostrarFeedback(statusEl, "Erro ao salvar: " + error.message, "error");
+      } else {
+        mostrarFeedback(statusEl, id ? "Projeto atualizado!" : "Projeto adicionado!", "success");
+        resetarFormProjeto();
+        carregarProjetos();
+      }
+    });
+
+    function prepararEdicaoProjeto(p) {
+      document.getElementById("form-proj-heading").textContent = "Editar Projeto";
+      document.getElementById("proj-id").value = p.id;
+      document.getElementById("proj-titulo").value = p.titulo || "";
+      document.getElementById("proj-categoria").value = p.categoria || "";
+      document.getElementById("proj-descricao").value = p.descricao || "";
+      document.getElementById("proj-tags").value = p.tags || "";
+      document.getElementById("proj-imagem").value = p.imagem_url || "";
+      document.getElementById("proj-link").value = p.link || "";
+      document.getElementById("proj-github").value = p.github || "";
+      document.getElementById("cancel-proj-btn").hidden = false;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function resetarFormProjeto() {
+      document.getElementById("form-proj-heading").textContent = "Novo Projeto";
+      document.getElementById("projeto-form").reset();
+      document.getElementById("proj-id").value = "";
+      document.getElementById("cancel-proj-btn").hidden = true;
+    }
+
+    document.getElementById("cancel-proj-btn").addEventListener("click", resetarFormProjeto);
+
+    async function excluirProjeto(id) {
+      if (!confirm("Deseja realmente excluir este projeto?")) return;
+      const { error } = await supabaseClient.from("projeto").delete().eq("id", id);
+      if (error) alert("Erro ao excluir: " + error.message);
+      else carregarProjetos();
+    }
+
+    // =========================================================
+    // 2. TABELA "usuarios" (Dados do Portfólio)
+    // =========================================================
+    async function carregarUsuario() {
+      const { data } = await supabaseClient.from("usuarios").select("*").limit(1).maybeSingle();
+      if (data) {
+        document.getElementById("user-id").value = data.id;
+        document.getElementById("user-nome").value = data.nome || "";
+        document.getElementById("user-subtitulo").value = data.subtitulo || "";
+        document.getElementById("user-bio").value = data.bio || "";
+        document.getElementById("user-whatsapp").value = data.whatsapp || "";
+        document.getElementById("user-email").value = data.email || "";
+        document.getElementById("user-github").value = data.github || "";
+        document.getElementById("user-linkedin").value = data.linkedin || "";
+      }
+    }
+
+    document.getElementById("usuario-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("user-id").value;
+      const statusEl = document.getElementById("user-status");
+
+      const payload = {
+        nome: document.getElementById("user-nome").value.trim(),
+        subtitulo: document.getElementById("user-subtitulo").value.trim(),
+        bio: document.getElementById("user-bio").value.trim(),
+        whatsapp: document.getElementById("user-whatsapp").value.trim(),
+        email: document.getElementById("user-email").value.trim(),
+        github: document.getElementById("user-github").value.trim(),
+        linkedin: document.getElementById("user-linkedin").value.trim()
+      };
+
+      let error;
+      if (id) {
+        ({ error } = await supabaseClient.from("usuarios").update(payload).eq("id", id));
+      } else {
+        ({ error } = await supabaseClient.from("usuarios").insert([payload]));
+      }
+
+      if (error) {
+        mostrarFeedback(statusEl, "Erro ao atualizar: " + error.message, "error");
+      } else {
+        mostrarFeedback(statusEl, "Informações salvas com sucesso!", "success");
+        carregarUsuario();
+      }
+    });
+
+    // =========================================================
+    // 3. TABELA "leads" (Visualizar e Apagar Contatos)
+    // =========================================================
+    async function carregarLeads() {
+      const tbody = document.getElementById("leads-list");
+      const { data, error } = await supabaseClient.from("leads").select("*").order("id", { ascending: false });
+
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="4" style="color: var(--danger);">Erro: ${error.message}</td></tr>`;
+        return;
+      }
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="color: var(--muted);">Nenhum lead registrado até o momento.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.map(l => `
+        <tr>
+          <td><strong>${l.nome || "-"}</strong></td>
+          <td>${l.email || l.telefone || "-"}</td>
+          <td style="color: var(--muted);">${l.mensagem || "-"}</td>
+          <td style="text-align: right;">
+            <button class="btn btn-danger btn-sm" onclick="excluirLead(${l.id})">Apagar</button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    async function excluirLead(id) {
+      if (!confirm("Remover este registro de lead?")) return;
+      const { error } = await supabaseClient.from("leads").delete().eq("id", id);
+      if (error) alert("Erro ao apagar lead: " + error.message);
+      else carregarLeads();
+    }
+
+    lucide.createIcons();
+    verificarSessao();
+  </script>
+</body>
+</html>
