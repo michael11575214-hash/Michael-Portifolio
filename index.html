@@ -1,768 +1,2192 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Portfólio de Michael — desenvolvimento web, interfaces modernas e projetos digitais.">
-  <meta name="theme-color" content="#07111f">
-  <title>Michael.dev | Portfólio</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Michael Junio | Desenvolvedor Full Stack</title>
 
 
+<!-- Favicon SVG com a sigla MJ -->
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23090d16'/%3E%3Cpath d='M20 75V25L42 52L64 25V75H54V43L42 58L30 43V75H20Z' fill='%2338bdf8'/%3E%3Cpath d='M78 25V62C78 72 71 78 61 78C56 78 52 76 49 73L55 66C57 68 59 69 61 69C65 69 68 66 68 61V25H78Z' fill='%23d4af37'/%3E%3C/svg%3E">
 
 
 
-  <style>
-    :root{
-      --bg:#050816;
-      --bg-soft:#0a1020;
-      --card:rgba(13,22,40,.72);
-      --card-strong:#0d1729;
-      --text:#f7fbff;
-      --muted:#9eacc0;
-      --line:rgba(255,255,255,.09);
-      --primary:#22d3ee;
-      --primary-2:#8b5cf6;
-      --success:#34d399;
-      --danger:#fb7185;
-      --shadow:0 25px 70px rgba(0,0,0,.35);
-      --radius:24px;
-      --container:min(1120px,92%);
-    }
+<!-- Google Fonts (Inter) -->
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{
-      font-family:Inter,system-ui,sans-serif;
-      background:
-        radial-gradient(circle at 15% 15%,rgba(34,211,238,.10),transparent 28%),
-        radial-gradient(circle at 85% 25%,rgba(139,92,246,.11),transparent 30%),
-        linear-gradient(180deg,#050816 0%,#07101e 55%,#050816 100%);
-      color:var(--text);
-      line-height:1.65;
-      overflow-x:hidden;
-    }
-    body::before{
-      content:"";
-      position:fixed;inset:0;pointer-events:none;z-index:-1;
-      background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
-                       linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-      background-size:60px 60px;
-      mask-image:linear-gradient(to bottom,black,transparent 80%);
-    }
-    a{color:inherit;text-decoration:none}
-    button,input{font:inherit}
-    button{cursor:pointer}
-    img{max-width:100%;display:block}
-    .container{width:var(--container);margin-inline:auto}
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-    header{
-      position:fixed;top:0;left:0;right:0;z-index:1000;
-      background:rgba(5,8,22,.72);
-      backdrop-filter:blur(18px);
-      border-bottom:1px solid var(--line);
-    }
-    nav{
-      min-height:76px;display:flex;align-items:center;justify-content:space-between;
-      gap:24px;
-    }
-    .logo{font:800 1.55rem Outfit,sans-serif;letter-spacing:-.04em}
-    .logo span{color:var(--primary)}
-    .nav-links{list-style:none;display:flex;align-items:center;gap:8px}
-    .nav-links a{
-      display:block;padding:10px 13px;border-radius:12px;color:#c6d0df;
-      font-size:.92rem;transition:.25s ease;
-    }
-    .nav-links a:hover{color:white;background:rgba(255,255,255,.06)}
-    .nav-links .btn-nav{
-      background:linear-gradient(135deg,var(--primary),#0ea5e9);
-      color:#031019;font-weight:800;margin-left:8px;
-    }
-    .mobile-menu-btn{
-      display:none;border:1px solid var(--line);background:rgba(255,255,255,.05);
-      color:white;border-radius:12px;width:44px;height:44px;
-    }
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    main{padding-top:76px}
-    section{padding:110px 0;scroll-margin-top:70px}
-    .hero{
-      min-height:calc(100vh - 76px);display:grid;grid-template-columns:1.15fr .85fr;
-      align-items:center;gap:60px;padding-top:75px;
-    }
-    .badge-status,.section-tag{
-      display:inline-flex;align-items:center;gap:9px;
-      color:#b8c7d9;font-size:.82rem;font-weight:700;letter-spacing:.04em;
-      text-transform:uppercase;
-    }
-    .badge-status{
-      padding:9px 13px;border:1px solid rgba(52,211,153,.18);
-      background:rgba(52,211,153,.07);border-radius:999px;
-    }
-    .status-dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 14px var(--success)}
-    h1,h2,h3,h4{font-family:Outfit,sans-serif;line-height:1.08}
-    h1{font-size:clamp(3rem,7vw,5.8rem);letter-spacing:-.065em;margin:24px 0}
-    h1 span{
-      background:linear-gradient(100deg,var(--primary),#60a5fa,var(--primary-2));
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-    }
-    .subtitle{font-size:1.2rem;font-weight:700;color:#dce7f5;margin-bottom:14px}
-    .description{color:var(--muted);font-size:1.04rem;max-width:680px}
-    .hero-buttons{display:flex;flex-wrap:wrap;gap:12px;margin:32px 0}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:9px;
-      border:0;border-radius:14px;padding:13px 18px;font-weight:800;
-      transition:transform .25s ease,box-shadow .25s ease,background .25s ease;
-    }
-    .btn:hover{transform:translateY(-3px)}
-    .btn svg{width:18px}
-    .btn-primary{color:#031019;background:linear-gradient(135deg,var(--primary),#67e8f9);box-shadow:0 12px 30px rgba(34,211,238,.16)}
-    .btn-secondary,.btn-outline{color:#e9f2fb;background:rgba(255,255,255,.05);border:1px solid var(--line)}
-    .btn-secondary:hover,.btn-outline:hover{background:rgba(255,255,255,.09)}
-    .hero-tech-stack{display:flex;align-items:center;gap:16px;color:#7f90a6;font-size:.84rem}
-    .tech-icons{display:flex;gap:8px}
-    .tech-icons i{width:20px;height:20px;color:#c8d5e6}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    .hero-image-wrapper{display:grid;place-items:center}
-    .profile-card{
-      width:min(390px,100%);aspect-ratio:4/5;position:relative;
-      border:1px solid var(--line);border-radius:34px;padding:12px;
-      background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.025));
-      box-shadow:var(--shadow);animation:float 6s ease-in-out infinite;
-    }
-    .profile-card::before{
-      content:"";position:absolute;inset:-1px;border-radius:34px;
-      background:linear-gradient(135deg,rgba(34,211,238,.3),transparent 45%,rgba(139,92,246,.28));
-      z-index:-1;filter:blur(12px);
-    }
-    .profile-img{
-      width:100%;height:100%;object-fit:cover;border-radius:25px;
-      background:#101a2c;
-    }
-    .experience-badge{
-      position:absolute;left:-30px;bottom:35px;
-      padding:14px 18px;border:1px solid var(--line);border-radius:16px;
-      background:rgba(7,14,28,.88);backdrop-filter:blur(15px);
-      box-shadow:var(--shadow);
-    }
-    .experience-badge .years{display:block;font:800 1.2rem Outfit;color:var(--primary)}
-    .experience-badge .text{font-size:.75rem;color:var(--muted)}
 
-    .stats-bar{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-      border:1px solid var(--line);border-radius:20px;overflow:hidden;
-      background:var(--line);box-shadow:var(--shadow);
-    }
-    .stat-item{background:rgba(11,20,37,.85);padding:28px;text-align:center}
-    .stat-item h3{font-size:2rem;color:var(--primary)}
-    .stat-item p{color:var(--muted);font-size:.9rem}
+<!-- Supabase SDK -->
 
-    .section-tag{color:var(--primary);margin-bottom:13px}
-    .section-title{font-size:clamp(2.2rem,4vw,3.5rem);letter-spacing:-.045em;margin-bottom:38px}
-    .about-wrapper{
-      display:grid;grid-template-columns:1fr;max-width:850px;
-      border:1px solid var(--line);border-radius:var(--radius);
-      padding:38px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
-    }
-    .about-content p{color:var(--muted);margin-bottom:18px}
-    .about-highlights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}
-    .highlight-item{
-      padding:15px;border:1px solid var(--line);border-radius:15px;
-      background:rgba(255,255,255,.025);display:flex;gap:10px;align-items:flex-start;
-      color:#d7e2ef;font-size:.86rem;
-    }
-    .highlight-item svg{color:var(--success);flex:none;width:19px}
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    .services-grid,.skills-grid,.projects-grid{display:grid;gap:18px}
-    .services-grid{grid-template-columns:repeat(3,1fr)}
-    .service-card,.skill-card,.project-card{
-      border:1px solid var(--line);background:var(--card);
-      border-radius:20px;transition:.3s ease;
-    }
-    .service-card{padding:28px}
-    .service-card:hover,.skill-card:hover,.project-card:hover{
-      transform:translateY(-7px);border-color:rgba(34,211,238,.28);
-      box-shadow:0 18px 45px rgba(0,0,0,.2);
-    }
-    .service-icon{
-      width:48px;height:48px;border-radius:14px;display:grid;place-items:center;
-      color:var(--primary);background:rgba(34,211,238,.08);margin-bottom:22px;
-    }
-    .service-card h3{font-size:1.25rem;margin-bottom:10px}
-    .service-card p,.skill-card p{color:var(--muted);font-size:.92rem}
 
-    .skills-grid{grid-template-columns:repeat(3,1fr)}
-    .skill-card{padding:24px}
-    .skill-card>svg{color:var(--primary);width:27px;margin-bottom:18px}
-    .skill-card h4{font-size:1.05rem;margin-bottom:6px}
 
-    .projects-grid{grid-template-columns:repeat(2,1fr)}
-    .project-card{overflow:hidden}
-    .project-image{height:230px;overflow:hidden;background:#0b1324}
-    .project-image img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-    .project-card:hover .project-image img{transform:scale(1.05)}
-    .project-info{padding:24px}
-    .project-header{display:flex;justify-content:space-between;gap:12px;align-items:start}
-    .project-header h3{font-size:1.25rem}
-    .project-category{font-size:.7rem;color:var(--primary);border:1px solid rgba(34,211,238,.2);padding:5px 8px;border-radius:999px;white-space:nowrap}
-    .project-info>p{color:var(--muted);font-size:.9rem;margin:12px 0 17px}
-    .tags{display:flex;flex-wrap:wrap;gap:7px}
-    .tags span{font-size:.72rem;color:#b8c6d7;background:rgba(255,255,255,.05);border:1px solid var(--line);padding:5px 8px;border-radius:7px}
-    .project-links{display:flex;gap:10px;margin-top:20px}
-    .link-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border-radius:10px;font-size:.8rem;font-weight:700}
-    .link-btn svg{width:15px}
-    .link-btn.primary{background:rgba(34,211,238,.1);color:var(--primary)}
-    .link-btn.secondary{background:rgba(255,255,255,.05);color:#d9e5f2}
+<style>
 
-    .contact-box{
-      position:relative;overflow:hidden;border:1px solid rgba(34,211,238,.16);
-      border-radius:30px;padding:55px;
-      background:
-        radial-gradient(circle at 80% 20%,rgba(139,92,246,.14),transparent 35%),
-        radial-gradient(circle at 15% 80%,rgba(34,211,238,.10),transparent 35%),
-        rgba(10,18,34,.85);
-    }
-    .contact-box h2{font-size:clamp(2rem,4vw,3.2rem);margin:8px 0 12px}
-    .contact-box>p{color:var(--muted);max-width:650px}
-    .section-tag-light{color:var(--primary);font-weight:800;font-size:.82rem;text-transform:uppercase}
-    .contact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:30px}
-    .contact-card{
-      display:flex;align-items:center;gap:12px;padding:17px;
-      border:1px solid var(--line);background:rgba(255,255,255,.035);
-      border-radius:15px;transition:.25s ease;
-    }
-    .contact-card:hover{transform:translateY(-4px);background:rgba(255,255,255,.065)}
-    .contact-icon{color:var(--primary)}
-    .contact-icon svg{width:20px}
-    .contact-title{display:block;font-size:.72rem;color:#8394aa}
-    .contact-value{display:block;font-size:.8rem;color:#e5edf6;word-break:break-word}
+:root {
 
-    .auth-box{margin-top:22px;max-width:560px}
-    .auth-form-grid{display:grid;gap:10px;margin-top:24px}
-    .field{position:relative}
-    .field input{
-      width:100%;padding:14px 15px;border-radius:13px;
-      border:1px solid var(--line);outline:none;background:rgba(255,255,255,.05);
-      color:white;transition:.2s ease;
-    }
-    .field input:focus{border-color:rgba(34,211,238,.5);box-shadow:0 0 0 4px rgba(34,211,238,.06)}
-    .password-toggle{
-      position:absolute;right:8px;top:7px;width:40px;height:40px;border:0;
-      background:transparent;color:#91a1b4;border-radius:9px;
-    }
-    .auth-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-    .auth-status{min-height:25px;margin-top:15px;color:#b8c7d9;font-size:.9rem}
-    .auth-status.error{color:#fb9aaa}
-    .auth-status.success{color:#6ee7b7}
-    .user-panel{
-      margin-top:25px;padding:24px;border:1px solid var(--line);
-      border-radius:18px;background:rgba(255,255,255,.035)
-    }
-    .user-panel p{color:var(--muted);margin:6px 0 18px}
-    [hidden]{display:none!important}
+--bg-color: #090d16;
 
-    footer{border-top:1px solid var(--line);padding:35px 0}
-    .footer-content{display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .footer-left p,.footer-right p{color:#74849a;font-size:.82rem;margin-top:7px}
+--card-bg: #111827;
 
-    .whatsapp{
-      position:fixed;right:22px;bottom:22px;width:56px;height:56px;
-      display:grid;place-items:center;border-radius:50%;z-index:900;
-      background:#25d366;color:white;box-shadow:0 12px 30px rgba(37,211,102,.25);
-      transition:.25s ease;
-    }
-    .whatsapp:hover{transform:scale(1.1) rotate(4deg)}
-    .whatsapp svg{width:25px}
+--border-color: #1f2937;
 
-    .reveal{opacity:0;transform:translateY(25px);transition:opacity .7s ease,transform .7s ease}
-    .reveal.show{opacity:1;transform:none}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+--border-hover: #374151;
 
-    @media(max-width:900px){
-      .nav-links{
-        position:absolute;top:76px;left:4%;right:4%;display:none;flex-direction:column;
-        align-items:stretch;padding:12px;border:1px solid var(--line);border-radius:18px;
-        background:rgba(7,13,26,.96);backdrop-filter:blur(18px)
-      }
-      .nav-links.open{display:flex}
-      .nav-links .btn-nav{margin-left:0;text-align:center}
-      .mobile-menu-btn{display:grid;place-items:center}
-      .hero{grid-template-columns:1fr;padding-top:65px}
-      .hero-image-wrapper{order:-1;max-width:320px;margin:auto}
-      .experience-badge{left:-12px}
-      .services-grid,.skills-grid{grid-template-columns:1fr 1fr}
-      .contact-grid{grid-template-columns:1fr 1fr}
-    }
+--text-main: #f9fafb;
 
-    @media(max-width:650px){
-      section{padding:80px 0}
-      .hero{gap:40px}
-      h1{font-size:clamp(2.8rem,14vw,4.3rem)}
-      .hero-buttons,.auth-actions{flex-direction:column}
-      .btn{width:100%}
-      .stats-bar,.services-grid,.skills-grid,.projects-grid,.about-highlights,.contact-grid{grid-template-columns:1fr}
-      .contact-box,.about-wrapper{padding:28px}
-      .footer-content{flex-direction:column;align-items:flex-start}
-      .hero-tech-stack{flex-wrap:wrap}
-      .profile-card{width:min(320px,100%)}
-    }
+--text-muted: #9ca3af;
 
-    @media(prefers-reduced-motion:reduce){
-      html{scroll-behavior:auto}
-      *,*::before,*::after{animation:none!important;transition:none!important}
-    }
-  </style>
+--primary: #38bdf8;
+
+--primary-hover: #0ea5e9;
+
+--accent: #818cf8;
+
+--gold: #e2b857;
+
+--error: #f43f5e;
+
+--success: #10b981;
+
+}
+
+
+
+{
+box-sizing: border-box;
+
+margin: 0;
+
+padding: 0;
+
+scroll-behavior: smooth;
+
+}
+
+
+
+body {
+
+font-family: 'Inter', sans-serif;
+
+background-color: var(--bg-color);
+
+color: var(--text-main);
+
+line-height: 1.6;
+
+display: flex;
+
+flex-direction: column;
+
+min-height: 100vh;
+
+}
+
+
+
+/* HEADER / NAVEGAÇÃO */
+
+header {
+
+background-color: rgba(9, 13, 22, 0.88);
+
+backdrop-filter: blur(12px);
+
+border-bottom: 1px solid var(--border-color);
+
+position: sticky;
+
+top: 0;
+
+z-index: 100;
+
+}
+
+
+
+nav {
+
+max-width: 1100px;
+
+margin: 0 auto;
+
+padding: 1rem 2rem;
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+}
+
+
+
+.logo {
+
+font-weight: 800;
+
+font-size: 1.25rem;
+
+color: var(--text-main);
+
+text-decoration: none;
+
+display: flex;
+
+align-items: center;
+
+gap: 0.75rem;
+
+}
+
+
+
+.logo-svg {
+
+width: 40px;
+
+height: 40px;
+
+flex-shrink: 0;
+
+}
+
+
+
+.logo-text {
+
+display: flex;
+
+flex-direction: column;
+
+line-height: 1.1;
+
+}
+
+
+
+.logo-text strong {
+
+font-size: 1.05rem;
+
+letter-spacing: -0.02em;
+
+}
+
+
+
+.logo-text span {
+
+font-size: 0.72rem;
+
+font-weight: 500;
+
+color: var(--primary);
+
+text-transform: uppercase;
+
+letter-spacing: 0.08em;
+
+}
+
+
+
+nav ul {
+
+list-style: none;
+
+display: flex;
+
+gap: 1.5rem;
+
+align-items: center;
+
+}
+
+
+
+nav a {
+
+color: var(--text-muted);
+
+text-decoration: none;
+
+font-weight: 500;
+
+font-size: 0.92rem;
+
+transition: color 0.2s ease;
+
+}
+
+
+
+nav a:hover {
+
+color: var(--primary);
+
+}
+
+
+
+.nav-btn-contact {
+
+background: rgba(56, 189, 248, 0.1);
+
+border: 1px solid rgba(56, 189, 248, 0.3);
+
+padding: 0.5rem 1rem;
+
+border-radius: 6px;
+
+color: var(--primary) !important;
+
+}
+
+
+
+.nav-btn-contact:hover {
+
+background: rgba(56, 189, 248, 0.2);
+
+}
+
+
+
+/* MAIN CONTAINER */
+
+main {
+
+max-width: 960px;
+
+width: 100%;
+
+margin: 0 auto;
+
+padding: 4rem 2rem;
+
+flex: 1;
+
+}
+
+
+
+section {
+
+margin-bottom: 6rem;
+
+scroll-margin-top: 90px;
+
+}
+
+
+
+h1, h2, h3 {
+
+font-weight: 700;
+
+letter-spacing: -0.025em;
+
+}
+
+
+
+h2 {
+
+font-size: 1.9rem;
+
+margin-bottom: 2rem;
+
+display: flex;
+
+align-items: center;
+
+gap: 0.75rem;
+
+}
+
+
+
+h2::after {
+
+content: "";
+
+flex: 1;
+
+height: 1px;
+
+background-color: var(--border-color);
+
+}
+
+
+
+p {
+
+color: var(--text-muted);
+
+font-size: 1.02rem;
+
+}
+
+
+
+/* SEÇÃO HERO (QUEM SOU EU) */
+
+.hero-wrapper {
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+gap: 3rem;
+
+}
+
+
+
+.hero-content {
+
+flex: 1;
+
+}
+
+
+
+.hero-emblem {
+
+width: 190px;
+
+height: 190px;
+
+background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), rgba(17, 24, 39, 0.9));
+
+border: 1px solid var(--border-color);
+
+border-radius: 28px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+flex-shrink: 0;
+
+}
+
+
+
+.hero-badge {
+
+display: inline-flex;
+
+align-items: center;
+
+gap: 0.5rem;
+
+background: rgba(16, 185, 129, 0.1);
+
+border: 1px solid rgba(16, 185, 129, 0.2);
+
+color: var(--success);
+
+padding: 0.35rem 0.85rem;
+
+border-radius: 50px;
+
+font-size: 0.85rem;
+
+font-weight: 600;
+
+margin-bottom: 1.5rem;
+
+}
+
+
+
+.hero-badge span {
+
+width: 8px;
+
+height: 8px;
+
+background-color: var(--success);
+
+border-radius: 50%;
+
+box-shadow: 0 0 8px var(--success);
+
+animation: pulse 2s infinite;
+
+}
+
+
+
+@keyframes pulse {
+
+0% { opacity: 1; }
+
+50% { opacity: 0.4; }
+
+100% { opacity: 1; }
+
+}
+
+
+
+#quem-sou-eu h1 {
+
+font-size: 3.1rem;
+
+color: var(--text-main);
+
+line-height: 1.12;
+
+margin-bottom: 1.2rem;
+
+}
+
+
+
+#quem-sou-eu h1 span {
+
+background: linear-gradient(to right, var(--primary), var(--accent));
+
+-webkit-background-clip: text;
+
+-webkit-text-fill-color: transparent;
+
+}
+
+
+
+.hero-desc {
+
+font-size: 1.12rem;
+
+margin-bottom: 2rem;
+
+}
+
+
+
+.hero-actions {
+
+display: flex;
+
+gap: 1rem;
+
+flex-wrap: wrap;
+
+}
+
+
+
+.btn-primary {
+
+background-color: var(--primary);
+
+color: var(--bg-color);
+
+font-weight: 600;
+
+padding: 0.75rem 1.5rem;
+
+border-radius: 8px;
+
+text-decoration: none;
+
+transition: background-color 0.2s ease, transform 0.1s ease;
+
+display: inline-flex;
+
+align-items: center;
+
+gap: 0.5rem;
+
+}
+
+
+
+.btn-primary:hover {
+
+background-color: var(--primary-hover);
+
+transform: translateY(-2px);
+
+}
+
+
+
+.btn-secondary {
+
+background-color: var(--card-bg);
+
+border: 1px solid var(--border-color);
+
+color: var(--text-main);
+
+font-weight: 600;
+
+padding: 0.75rem 1.5rem;
+
+border-radius: 8px;
+
+text-decoration: none;
+
+transition: border-color 0.2s ease, transform 0.1s ease;
+
+display: inline-flex;
+
+align-items: center;
+
+gap: 0.5rem;
+
+}
+
+
+
+.btn-secondary:hover {
+
+border-color: var(--border-hover);
+
+transform: translateY(-2px);
+
+}
+
+
+
+/* MÉTRICAS E SOBRE DETALHADO */
+
+.stats-grid {
+
+display: grid;
+
+grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+gap: 1rem;
+
+margin-top: 3rem;
+
+}
+
+
+
+.stat-box {
+
+background-color: var(--card-bg);
+
+border: 1px solid var(--border-color);
+
+border-radius: 12px;
+
+padding: 1.3rem;
+
+text-align: center;
+
+}
+
+
+
+.stat-box strong {
+
+display: block;
+
+font-size: 1.8rem;
+
+color: var(--primary);
+
+font-weight: 800;
+
+}
+
+
+
+.stat-box span {
+
+font-size: 0.85rem;
+
+color: var(--text-muted);
+
+}
+
+
+
+/* SERVIÇOS / O QUE EU FAÇO */
+
+.services-grid {
+
+display: grid;
+
+grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+gap: 1.25rem;
+
+}
+
+
+
+.service-card {
+
+background-color: var(--card-bg);
+
+border: 1px solid var(--border-color);
+
+border-radius: 12px;
+
+padding: 1.6rem;
+
+transition: border-color 0.2s ease, transform 0.2s ease;
+
+}
+
+
+
+.service-card:hover {
+
+border-color: var(--accent);
+
+transform: translateY(-3px);
+
+}
+
+
+
+.service-icon {
+
+font-size: 1.5rem;
+
+margin-bottom: 0.8rem;
+
+display: inline-block;
+
+}
+
+
+
+.service-card h3 {
+
+font-size: 1.15rem;
+
+color: var(--text-main);
+
+margin-bottom: 0.5rem;
+
+}
+
+
+
+.service-card p {
+
+font-size: 0.92rem;
+
+}
+
+
+
+/* SEÇÃO DE HABILIDADES (SKILLS) */
+
+.skills-grid {
+
+display: grid;
+
+grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+
+gap: 1rem;
+
+margin-top: 1.5rem;
+
+}
+
+
+
+.skill-card {
+
+background-color: var(--card-bg);
+
+border: 1px solid var(--border-color);
+
+border-radius: 10px;
+
+padding: 1.3rem;
+
+transition: border-color 0.2s ease;
+
+}
+
+
+
+.skill-card:hover {
+
+border-color: var(--primary);
+
+}
+
+
+
+.skill-card h4 {
+
+color: var(--text-main);
+
+font-size: 1rem;
+
+margin-bottom: 0.6rem;
+
+}
+
+
+
+.tags {
+
+display: flex;
+
+flex-wrap: wrap;
+
+gap: 0.4rem;
+
+}
+
+
+
+.tag {
+
+background-color: rgba(56, 189, 248, 0.08);
+
+color: var(--primary);
+
+border: 1px solid rgba(56, 189, 248, 0.2);
+
+padding: 0.2rem 0.55rem;
+
+border-radius: 5px;
+
+font-size: 0.78rem;
+
+font-weight: 500;
+
+}
+
+
+
+/* EXPERIÊNCIA / TIMELINE */
+
+.timeline {
+
+display: flex;
+
+flex-direction: column;
+
+gap: 1.5rem;
+
+}
+
+
+
+.timeline-item {
+
+background-color: var(--card-bg);
+
+border: 1px solid var(--border-color);
+
+border-radius: 10px;
+
+padding: 1.6rem;
+
+border-left: 4px solid var(--primary);
+
+}
+
+
+
+.timeline-item h3 {
+
+font-size: 1.15rem;
+
+color: var(--text-main);
+
+}
+
+
+
+.timeline-company {
+
+font-size: 0.9rem;
+
+color: var(--text-muted);
+
+font-weight: 500;
+
+}
+
+
+
+.timeline-date {
+
+font-size: 0.85rem;
+
+color: var(--primary);
+
+font-weight: 600;
+
+margin-bottom: 0.4rem;
+
+display: block;
+
+}
+
+
+
+.timeline-item p {
+
+font-size: 0.95rem;
+
+margin-top: 0.6rem;
+
+}
+
+
+
+/* CERTIFICAÇÕES E FORMAÇÃO */
+
+.certs-grid {
+
+display: grid;
+
+grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+gap: 1rem;
+
+}
+
+
+
+.cert-card {
+
+background-color: var(--card-bg);
+
+border: 1px solid var(--border-color);
+
+border-radius: 10px;
+
+padding: 1.3rem;
+
+}
+
+
+
+.cert-card h4 {
+
+color: var(--text-main);
+
+font-size: 1rem;
+
+margin-bottom: 0.3rem;
+
+}
+
+
+
+.cert-issuer {
+
+font-size: 0.85rem;
+
+color: var(--accent);
+
+font-weight: 500;
+
+display: block;
+
+}
+
+
+
+.cert-year {
+
+font-size: 0.8rem;
+
+color: var(--text-muted);
+
+margin-top: 0.2rem;
+
+display: block;
+
+}
+
+
+
+/* PROJETOS */
+
+#lista-projetos {
+
+display: grid;
+
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+gap: 1.5rem;
+
+}
+
+
+
+.project-card {
+
+background-color: var(--card-bg);
+
+border: 1px solid var(--border-color);
+
+border-radius: 12px;
+
+padding: 1.8rem;
+
+transition: transform 0.2s ease, border-color 0.2s ease;
+
+display: flex;
+
+flex-direction: column;
+
+justify-content: space-between;
+
+}
+
+
+
+.project-card:hover {
+
+transform: translateY(-4px);
+
+border-color: var(--primary);
+
+}
+
+
+
+.project-card h3 {
+
+color: var(--text-main);
+
+font-size: 1.25rem;
+
+margin-bottom: 0.75rem;
+
+}
+
+
+
+.project-card p {
+
+font-size: 0.95rem;
+
+margin-bottom: 1.2rem;
+
+}
+
+
+
+.project-tags {
+
+display: flex;
+
+flex-wrap: wrap;
+
+gap: 0.4rem;
+
+margin-bottom: 1.2rem;
+
+}
+
+
+
+.project-card a {
+
+color: var(--primary);
+
+text-decoration: none;
+
+font-weight: 600;
+
+font-size: 0.9rem;
+
+display: inline-flex;
+
+align-items: center;
+
+gap: 0.3rem;
+
+}
+
+
+
+.project-card a:hover {
+
+text-decoration: underline;
+
+}
+
+
+
+/* FORMULÁRIOS E INPUTS */
+
+.form-container {
+
+background-color: var(--card-bg);
+
+border: 1px solid var(--border-color);
+
+border-radius: 16px;
+
+padding: 2.5rem;
+
+}
+
+
+
+.form-group {
+
+margin-bottom: 1.25rem;
+
+}
+
+
+
+label {
+
+display: block;
+
+font-size: 0.9rem;
+
+font-weight: 500;
+
+color: var(--text-main);
+
+margin-bottom: 0.5rem;
+
+}
+
+
+
+input, textarea {
+
+width: 100%;
+
+padding: 0.85rem 1rem;
+
+background-color: var(--bg-color);
+
+border: 1px solid var(--border-color);
+
+border-radius: 8px;
+
+color: var(--text-main);
+
+font-family: inherit;
+
+font-size: 1rem;
+
+outline: none;
+
+transition: border-color 0.2s ease;
+
+}
+
+
+
+input:focus, textarea:focus {
+
+border-color: var(--primary);
+
+}
+
+
+
+button[type="submit"] {
+
+background-color: var(--primary);
+
+color: var(--bg-color);
+
+font-weight: 600;
+
+border: none;
+
+border-radius: 8px;
+
+padding: 0.9rem 1.5rem;
+
+cursor: pointer;
+
+font-size: 1rem;
+
+transition: background-color 0.2s ease;
+
+width: 100%;
+
+margin-top: 0.5rem;
+
+}
+
+
+
+button[type="submit"]:hover {
+
+background-color: var(--primary-hover);
+
+}
+
+
+
+#btn-sair {
+
+background-color: var(--error);
+
+color: white;
+
+width: auto;
+
+padding: 0.5rem 1rem;
+
+font-size: 0.9rem;
+
+border: none;
+
+border-radius: 6px;
+
+cursor: pointer;
+
+}
+
+
+
+#btn-sair:hover {
+
+background-color: #e11d48;
+
+}
+
+
+
+/* STATUS FEEDBACKS */
+
+#status-contato, #status-login {
+
+margin-top: 1rem;
+
+font-size: 0.9rem;
+
+font-weight: 500;
+
+}
+
+
+
+/* PAINEL ADMINISTRATIVO */
+
+#painel-logado {
+
+background-color: var(--card-bg);
+
+border: 1px solid var(--border-color);
+
+border-radius: 12px;
+
+padding: 1.5rem;
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+}
+
+
+
+#painel-logado p {
+
+color: var(--text-main);
+
+}
+
+
+
+/* FOOTER */
+
+footer {
+
+border-top: 1px solid var(--border-color);
+
+text-align: center;
+
+padding: 2.5rem 1.5rem;
+
+color: var(--text-muted);
+
+font-size: 0.9rem;
+
+display: flex;
+
+flex-direction: column;
+
+align-items: center;
+
+gap: 1rem;
+
+}
+
+
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 768px) {
+
+.hero-wrapper {
+
+flex-direction: column-reverse;
+
+text-align: center;
+
+}
+
+.hero-actions {
+
+justify-content: center;
+
+}
+
+#quem-sou-eu h1 {
+
+font-size: 2.4rem;
+
+}
+
+nav {
+
+flex-direction: column;
+
+gap: 1rem;
+
+}
+
+nav ul {
+
+gap: 1rem;
+
+flex-wrap: wrap;
+
+justify-content: center;
+
+}
+
+}
+
+</style>
+
 </head>
 
 <body>
-  <header>
-    <nav class="container">
-      <a href="#inicio" class="logo">Michael<span>.dev</span></a>
 
-      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu" aria-expanded="false">
-        <i data-lucide="menu"></i>
-      </button>
 
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#inicio">Início</a></li>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#servicos">Serviços</a></li>
-        <li><a href="#habilidades">Habilidades</a></li>
-        <li><a href="#projetos">Projetos</a></li>
-        <li><a href="#contato">Contato</a></li>
-        <li><a href="#login" class="btn-nav">Área do usuário</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <main>
-    <section id="inicio" class="hero container">
-      <div class="hero-text reveal">
-        <div class="badge-status">
-          <span class="status-dot"></span>
-          <span>Estudante • Tecnologia • Web</span>
-        </div>
+<!-- NAVEGAÇÃO COM A LOGO MJ -->
 
-        <h1>Transformando ideias em <span>experiências digitais.</span></h1>
-        <p class="subtitle">Desenvolvimento Web & Interfaces Modernas</p>
-        <p class="description">
-          Sou Michael, estudante e criador de projetos digitais. Gosto de transformar
-          ideias em sites modernos, responsivos e com uma experiência visual marcante.
-        </p>
+<header>
 
-        <div class="hero-buttons">
-          <a href="#projetos" class="btn btn-primary">Ver meus projetos <i data-lucide="arrow-right"></i></a>
-          <a href="#contato" class="btn btn-secondary"><i data-lucide="message-circle"></i> Entrar em contato</a>
-        </div>
+<nav>
 
-        <div class="hero-tech-stack">
-          <span>Tecnologias:</span>
-          <div class="tech-icons" aria-label="Tecnologias">
-            <i data-lucide="file-code-2" title="HTML e CSS"></i>
-            <i data-lucide="code-2" title="JavaScript"></i>
-            <i data-lucide="database" title="Supabase"></i>
-            <i data-lucide="palette" title="UI e Design"></i>
-          </div>
-        </div>
-      </div>
+<a href="#" class="logo" aria-label="Michael Junio Home">
 
-      <div class="hero-image-wrapper reveal">
-        <div class="profile-card">
-          <img src="foto.jpg" alt="Foto de Michael" class="profile-img"
-               onerror="this.src='https://placehold.co/800x1000/0d1729/22d3ee?text=Michael.dev'">
-          <div class="experience-badge">
-            <span class="years">∞</span>
-            <span class="text">ideias para criar e aprender</span>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- Logo Monograma MJ Vetorial -->
 
-    <section class="container reveal" aria-label="Resumo">
-      <div class="stats-bar">
-        <div class="stat-item"><h3>HTML</h3><p>Estrutura web</p></div>
-        <div class="stat-item"><h3>CSS</h3><p>Design responsivo</p></div>
-        <div class="stat-item"><h3>JS</h3><p>Interatividade</p></div>
-      </div>
-    </section>
+<svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-    <section id="sobre" class="container reveal">
-      <span class="section-tag">Sobre mim</span>
-      <h2 class="section-title">Tecnologia, criatividade e evolução.</h2>
+<defs>
 
-      <div class="about-wrapper">
-        <div class="about-content">
-          <p>
-            Sou Michael Junio Souza Gonçalves, estudante interessado em tecnologia,
-            desenvolvimento web e criação de projetos digitais.
-          </p>
-          <p>
-            Busco evoluir continuamente minhas habilidades, aprender novas ferramentas
-            e transformar cada projeto em uma oportunidade de colocar o conhecimento em prática.
-          </p>
+<linearGradient id="mjGold" x1="0%" y1="0%" x2="100%" y2="100%">
 
-          <div class="about-highlights">
-            <div class="highlight-item"><i data-lucide="check-circle-2"></i><span>Aprendizado contínuo</span></div>
-            <div class="highlight-item"><i data-lucide="check-circle-2"></i><span>Projetos responsivos</span></div>
-            <div class="highlight-item"><i data-lucide="check-circle-2"></i><span>Organização e dedicação</span></div>
-          </div>
+<stop offset="0%" stop-color="#f5d076"/>
 
-          <a href="#contato" class="btn btn-outline"><i data-lucide="send"></i> Falar comigo</a>
-        </div>
-      </div>
-    </section>
+<stop offset="50%" stop-color="#d4af37"/>
 
-    <section id="servicos" class="container reveal">
-      <span class="section-tag">O que eu faço</span>
-      <h2 class="section-title">Soluções e projetos digitais.</h2>
+<stop offset="100%" stop-color="#9e7b1e"/>
 
-      <div class="services-grid">
-        <article class="service-card">
-          <div class="service-icon"><i data-lucide="layout"></i></div>
-          <h3>Desenvolvimento Web</h3>
-          <p>Criação de páginas modernas, responsivas e organizadas para diferentes tipos de projetos.</p>
-        </article>
-        <article class="service-card">
-          <div class="service-icon"><i data-lucide="smartphone"></i></div>
-          <h3>Interfaces Responsivas</h3>
-          <p>Layouts adaptados para computador, tablet e celular, com foco em usabilidade.</p>
-        </article>
-        <article class="service-card">
-          <div class="service-icon"><i data-lucide="zap"></i></div>
-          <h3>Interatividade</h3>
-          <p>Animações, menus, formulários e recursos em JavaScript para deixar o projeto mais completo.</p>
-        </article>
-      </div>
-    </section>
+</linearGradient>
 
-    <section id="habilidades" class="container reveal">
-      <span class="section-tag">Competências</span>
-      <h2 class="section-title">Tecnologias & ferramentas.</h2>
+<linearGradient id="mjBlue" x1="0%" y1="0%" x2="100%" y2="100%">
 
-      <div class="skills-grid">
-        <article class="skill-card"><i data-lucide="code-2"></i><h4>HTML5 & CSS3</h4><p>Estrutura, semântica, Flexbox, Grid e responsividade.</p></article>
-        <article class="skill-card"><i data-lucide="braces"></i><h4>JavaScript</h4><p>Interações, DOM, eventos e integração com serviços.</p></article>
-        <article class="skill-card"><i data-lucide="database"></i><h4>Supabase</h4><p>Autenticação e integração com banco de dados.</p></article>
-        <article class="skill-card"><i data-lucide="github"></i><h4>Git & GitHub</h4><p>Organização e versionamento de projetos.</p></article>
-        <article class="skill-card"><i data-lucide="palette"></i><h4>UI & Design</h4><p>Criação de interfaces modernas e experiências visuais.</p></article>
-        <article class="skill-card"><i data-lucide="monitor-smartphone"></i><h4>Responsividade</h4><p>Experiência consistente em diferentes tamanhos de tela.</p></article>
-      </div>
-    </section>
+<stop offset="0%" stop-color="#38bdf8"/>
 
-    <section id="projetos" class="container reveal">
-      <span class="section-tag">Portfólio</span>
-      <h2 class="section-title">Projetos em destaque.</h2>
+<stop offset="100%" stop-color="#818cf8"/>
 
-      <div class="projects-grid">
-        <article class="project-card">
-          <div class="project-image">
-            <img src="https://placehold.co/900x520/0d1729/22d3ee?text=Portf%C3%B3lio+Digital" alt="Prévia do projeto de portfólio">
-          </div>
-          <div class="project-info">
-            <div class="project-header"><h3>Portfólio Digital</h3><span class="project-category">Web</span></div>
-            <p>Site pessoal para apresentar perfil, habilidades, projetos e formas de contato.</p>
-            <div class="tags"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Supabase</span></div>
-            <div class="project-links">
-              <a href="#inicio" class="link-btn primary"><i data-lucide="external-link"></i> Ver projeto</a>
-              <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="link-btn secondary"><i data-lucide="github"></i> GitHub</a>
-            </div>
-          </div>
-        </article>
+</linearGradient>
 
-        <article class="project-card">
-          <div class="project-image">
-            <img src="https://placehold.co/900x520/0d1729/8b5cf6?text=Projeto+Web" alt="Prévia de projeto web">
-          </div>
-          <div class="project-info">
-            <div class="project-header"><h3>Projeto Web Interativo</h3><span class="project-category">JavaScript</span></div>
-            <p>Projeto com foco em interação, animações e uma experiência mais próxima de uma aplicação.</p>
-            <div class="tags"><span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>UI</span></div>
-            <div class="project-links">
-              <a href="#contato" class="link-btn primary"><i data-lucide="external-link"></i> Conhecer</a>
-              <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="link-btn secondary"><i data-lucide="github"></i> GitHub</a>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
+</defs>
 
-    <section id="contato" class="container reveal">
-      <div class="contact-box">
-        <span class="section-tag-light">Contato</span>
-        <h2>Vamos criar algo juntos?</h2>
-        <p>Entre em contato para conversar sobre projetos, ideias, oportunidades ou colaboração.</p>
+<rect x="3" y="3" width="94" height="94" rx="22" fill="#111827" stroke="url(#mjGold)" stroke-width="2.5"/>
 
-        <div class="contact-grid">
-          <a href="https://wa.me/5533999998749" target="_blank" rel="noopener noreferrer" class="contact-card">
-            <div class="contact-icon"><i data-lucide="message-circle"></i></div>
-            <div class="contact-details"><span class="contact-title">WhatsApp</span><span class="contact-value">+55 (33) 99999-8749</span></div>
-          </a>
-          <a href="mailto:michael@exemplo.com" class="contact-card">
-            <div class="contact-icon"><i data-lucide="mail"></i></div>
-            <div class="contact-details"><span class="contact-title">E-mail</span><span class="contact-value">michael@exemplo.com</span></div>
-          </a>
-          <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" class="contact-card">
-            <div class="contact-icon"><i data-lucide="linkedin"></i></div>
-            <div class="contact-details"><span class="contact-title">LinkedIn</span><span class="contact-value">Meu perfil</span></div>
-          </a>
-          <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="contact-card">
-            <div class="contact-icon"><i data-lucide="github"></i></div>
-            <div class="contact-details"><span class="contact-title">GitHub</span><span class="contact-value">Meus projetos</span></div>
-          </a>
-        </div>
-      </div>
-    </section>
+<!-- Letra M -->
 
-    <section id="login" class="container reveal">
-      <div class="contact-box">
-        <span class="section-tag-light">Área do usuário</span>
-        <h2 id="auth-title">Entrar na conta</h2>
-        <p id="auth-message">Faça login ou crie uma conta para acessar sua área pessoal.</p>
+<path d="M22 74V26L42 51L62 26V74H53V42L42 56L31 42V74H22Z" fill="url(#mjBlue)"/>
 
-        <div id="auth-form" class="auth-box">
-          <div class="auth-form-grid">
-            <div class="field">
-              <input id="auth-name" type="text" placeholder="Seu nome" autocomplete="name">
-            </div>
-            <div class="field">
-              <input id="auth-email" type="email" placeholder="Seu e-mail" autocomplete="email">
-            </div>
-            <div class="field">
-              <input id="auth-password" type="password" placeholder="Sua senha" autocomplete="current-password">
-              <button type="button" class="password-toggle" id="passwordToggle" aria-label="Mostrar senha">
-                <i data-lucide="eye"></i>
-              </button>
-            </div>
-          </div>
+<!-- Letra J entrelaçada -->
 
-          <div class="auth-actions">
-            <button id="login-btn" class="btn btn-primary" type="button">Entrar</button>
-            <button id="signup-btn" class="btn btn-secondary" type="button">Criar conta</button>
-          </div>
-          <div id="auth-status" class="auth-status" role="status"></div>
-        </div>
+<path d="M77 26V60C77 71 70 77 60 77C54 77 49 74 46 70L52 63C54 66 57 68 60 68C65 68 68 65 68 59V26H77Z" fill="url(#mjGold)"/>
 
-        <div id="user-panel" class="user-panel" hidden>
-          <h3 id="user-name-display">Olá!</h3>
-          <p id="user-email-display"></p>
-          <button id="logout-btn" class="btn btn-primary" type="button">Sair da conta</button>
-        </div>
-      </div>
-    </section>
-  </main>
+</svg>
 
-  <a class="whatsapp" href="https://wa.me/5533999998749" target="_blank" rel="noopener noreferrer" aria-label="Falar pelo WhatsApp">
-    <i data-lucide="message-circle"></i>
-  </a>
+<div class="logo-text">
 
-  <footer>
-    <div class="container footer-content">
-      <div class="footer-left">
-        <a href="#inicio" class="logo">Michael<span>.dev</span></a>
-        <p>Construindo, aprendendo e evoluindo uma linha de código por vez.</p>
-      </div>
-      <div class="footer-right">
-        <p>© 2026 Michael. Todos os direitos reservados.</p>
-      </div>
-    </div>
-  </footer>
+<strong>Michael Junio</strong>
 
-  <script>
-    // ==============================
-    // SUPABASE
-    // ==============================
-    const SUPABASE_URL = "https://migwvqkstzgviabwqxko.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_dyE4gLTHIV5DlxXt6UK51A_PGpADnZ6";
+<span>Full Stack Dev</span>
 
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+</div>
 
-    const authForm = document.getElementById("auth-form");
-    const userPanel = document.getElementById("user-panel");
-    const authTitle = document.getElementById("auth-title");
-    const authMessage = document.getElementById("auth-message");
-    const authStatus = document.getElementById("auth-status");
-    const nameInput = document.getElementById("auth-name");
-    const emailInput = document.getElementById("auth-email");
-    const passwordInput = document.getElementById("auth-password");
+</a>
 
-    function setStatus(message, type = "") {
-      authStatus.textContent = message;
-      authStatus.className = "auth-status " + type;
-    }
 
-    function setButtonsLoading(loading) {
-      document.getElementById("login-btn").disabled = loading;
-      document.getElementById("signup-btn").disabled = loading;
-      document.getElementById("login-btn").textContent = loading ? "Aguarde..." : "Entrar";
-      document.getElementById("signup-btn").textContent = loading ? "Aguarde..." : "Criar conta";
-    }
 
-    function showLoggedOut() {
-      authForm.hidden = false;
-      userPanel.hidden = true;
-      authTitle.textContent = "Entrar na conta";
-      authMessage.textContent = "Faça login ou crie uma conta para acessar sua área pessoal.";
-    }
+<ul>
 
-    function showLoggedIn(user) {
-      authForm.hidden = true;
-      userPanel.hidden = false;
-      authTitle.textContent = "Você está conectado!";
-      authMessage.textContent = "Sua sessão está ativa.";
-      const nome = user.user_metadata?.nome || user.user_metadata?.name || "Usuário";
-      document.getElementById("user-name-display").textContent = "Olá, " + nome + " 👋";
-      document.getElementById("user-email-display").textContent = user.email || "";
-      setStatus("");
-    }
+<li><a href="#quem-sou-eu">Sobre</a></li>
 
-    async function atualizarUsuario() {
-      const { data } = await supabaseClient.auth.getUser();
-      if (data?.user) showLoggedIn(data.user);
-      else showLoggedOut();
-    }
+<li><a href="#servicos">Serviços</a></li>
 
-    document.getElementById("signup-btn").addEventListener("click", async () => {
-      const nome = nameInput.value.trim();
-      const email = emailInput.value.trim();
-      const senha = passwordInput.value;
+<li><a href="#habilidades">Skills</a></li>
 
-      if (!nome || !email || !senha) {
-        setStatus("Preencha nome, e-mail e senha.", "error");
-        return;
-      }
+<li><a href="#experiencia">Experiência</a></li>
 
-      if (senha.length < 6) {
-        setStatus("A senha precisa ter pelo menos 6 caracteres.", "error");
-        return;
-      }
+<li><a href="#projetos">Projetos</a></li>
 
-      setButtonsLoading(true);
-      setStatus("Criando sua conta...");
+<li><a href="#area-login">Admin</a></li>
 
-      const { data, error } = await supabaseClient.auth.signUp({
-        email,
-        password: senha,
-        options: { data: { nome } }
-      });
+<li><a href="#contato" class="nav-btn-contact">Contato</a></li>
 
-      setButtonsLoading(false);
+</ul>
 
-      if (error) {
-        setStatus("Erro ao criar conta: " + error.message, "error");
-        return;
-      }
+</nav>
 
-      if (data.session && data.user) {
-        showLoggedIn(data.user);
-        setStatus("Conta criada com sucesso!", "success");
-      } else {
-        setStatus("Cadastro realizado! Verifique seu e-mail para confirmar a conta.", "success");
-      }
-    });
+</header>
 
-    document.getElementById("login-btn").addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      const senha = passwordInput.value;
 
-      if (!email || !senha) {
-        setStatus("Digite seu e-mail e sua senha.", "error");
-        return;
-      }
 
-      setButtonsLoading(true);
-      setStatus("Entrando...");
+<main>
 
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password: senha
-      });
+<!-- SEÇÃO: QUEM SOU EU (HERO) -->
 
-      setButtonsLoading(false);
+<section id="quem-sou-eu">
 
-      if (error) {
-        setStatus("Não foi possível entrar: " + error.message, "error");
-        return;
-      }
+<div class="hero-wrapper">
 
-      if (data.user) {
-        showLoggedIn(data.user);
-        setStatus("Login realizado com sucesso!", "success");
-      }
-    });
+<div class="hero-content">
 
-    document.getElementById("logout-btn").addEventListener("click", async () => {
-      const { error } = await supabaseClient.auth.signOut();
-      if (error) {
-        setStatus("Erro ao sair: " + error.message, "error");
-        return;
-      }
-      showLoggedOut();
-      setStatus("Você saiu da conta.", "success");
-    });
+<div class="hero-badge">
 
-    document.getElementById("passwordToggle").addEventListener("click", () => {
-      const isPassword = passwordInput.type === "password";
-      passwordInput.type = isPassword ? "text" : "password";
-      document.getElementById("passwordToggle").innerHTML =
-        isPassword ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
-      lucide.createIcons();
-    });
+<span></span> Disponível para novos projetos & consultorias
 
-    supabaseClient.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) showLoggedIn(session.user);
-      else showLoggedOut();
-    });
+</div>
 
-    // ==============================
-    // MENU MOBILE
-    // ==============================
-    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-    const navLinks = document.getElementById("navLinks");
+<h1>Olá, eu sou o <span>Michael Junio</span></h1>
 
-    mobileMenuBtn.addEventListener("click", () => {
-      const open = navLinks.classList.toggle("open");
-      mobileMenuBtn.setAttribute("aria-expanded", String(open));
-      mobileMenuBtn.innerHTML = open
-        ? '<i data-lucide="x"></i>'
-        : '<i data-lucide="menu"></i>';
-      lucide.createIcons();
-    });
+<p class="hero-desc">
 
-    document.querySelectorAll("#navLinks a").forEach(link => {
-      link.addEventListener("click", () => {
-        navLinks.classList.remove("open");
-        mobileMenuBtn.setAttribute("aria-expanded", "false");
-        mobileMenuBtn.innerHTML = '<i data-lucide="menu"></i>';
-        lucide.createIcons();
-      });
-    });
+Desenvolvedor Full Stack focado em construir aplicações web modernas, seguras e escaláveis. Especialista em transformar regras de negócio complexas em interfaces rápidas e arquiteturas de banco de dados eficientes.
 
-    // ==============================
-    // ANIMAÇÕES AO ROLAR
-    // ==============================
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("show");
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
+</p>
 
-    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
-    // Ícones
-    lucide.createIcons();
+<div class="hero-actions">
 
-    // Estado inicial da autenticação
-    atualizarUsuario();
-  </script>
-</body>
-</html>
+<a href="#projetos" class="btn-primary">Ver Projetos &rarr;</a>
+
+<a href="https://github.com/michaeljunio" target="_blank" class="btn-secondary">GitHub</a>
+
+<a href="https://linkedin.com/in/michaeljunio" target="_blank" class="btn-secondary">LinkedIn</a>
+
+</div>
+
+</div>
+
+
+
+<!-- Emblema Grande com a Logo MJ -->
+
+<div class="hero-emblem" title="MJ — Michael Junio">
+
+<svg width="130" height="130" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<path d="M18 76V24L42 53L66 24V76H56V41L42 58L28 41V76H18Z" fill="url(#mjBlue)"/>
+
+<path d="M82 24V61C82 73 74 80 62 80C55 80 49 77 45 72L52 65C55 68 58 70 62 70C68 70 71 66 71 60V24H82Z" fill="url(#mjGold)"/>
+
+</svg>
+
+</div>
+
+</div>
+
+
+
+<!-- Métricas e Destaques -->
+
+<div class="stats-grid">
+
+<div class="stat-box">
+
+<strong>3+ Anos</strong>
+
+<span>Experiência em Desenvolvimento</span>
+
+</div>
+
+<div class="stat-box">
+
+<strong>20+</strong>
+
+<span>Projetos Web & APIs Entregues</span>
+
+</div>
+
+<div class="stat-box">
+
+<strong>100%</strong>
+
+<span>Foco em Performance e Segurança</span>
+
+</div>
+
+<div class="stat-box">
+
+<strong>Full Stack</strong>
+
+<span>Do Banco de Dados ao Front-end</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- SEÇÃO: SERVIÇOS / O QUE EU FAÇO -->
+
+<section id="servicos">
+
+<h2>O Que Eu Faço</h2>
+
+<div class="services-grid">
+
+<div class="service-card">
+
+<span class="service-icon">💻</span>
+
+<h3>Aplicações Web Full Stack</h3>
+
+<p>Desenvolvimento completo de sistemas web, dashboards administrativos, SaaS e landing pages de alta conversão com foco em experiência do usuário.</p>
+
+</div>
+
+<div class="service-card">
+
+<span class="service-icon">🗄️</span>
+
+<h3>Banco de Dados & Backend</h3>
+
+<p>Modelagem relacional em PostgreSQL, criação de APIs RESTful seguras, políticas de acesso (RLS) e autenticação via Supabase e Node.js.</p>
+
+</div>
+
+<div class="service-card">
+
+<span class="service-icon">⚡</span>
+
+<h3>Otimização & Integrações</h3>
+
+<p>Integração com gateways de pagamento, automação de fluxos, melhoria de performance (Core Web Vitals) e deploy contínuo em nuvem.</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- SEÇÃO: HABILIDADES -->
+
+<section id="habilidades">
+
+<h2>Stack Tecnológica</h2>
+
+<div class="skills-grid">
+
+<div class="skill-card">
+
+<h4>Frontend</h4>
+
+<div class="tags">
+
+<span class="tag">HTML5</span>
+
+<span class="tag">CSS3</span>
+
+<span class="tag">JavaScript ES6+</span>
+
+<span class="tag">React</span>
+
+<span class="tag">Next.js</span>
+
+<span class="tag">Tailwind CSS</span>
+
+</div>
+
+</div>
+
+<div class="skill-card">
+
+<h4>Backend & APIs</h4>
+
+<div class="tags">
+
+<span class="tag">Node.js</span>
+
+<span class="tag">TypeScript</span>
+
+<span class="tag">Express</span>
+
+<span class="tag">REST APIs</span>
+
+<span class="tag">Webhooks</span>
+
+</div>
+
+</div>
+
+<div class="skill-card">
+
+<h4>Banco de Dados & BaaS</h4>
+
+<div class="tags">
+
+<span class="tag">Supabase</span>
+
+<span class="tag">PostgreSQL</span>
+
+<span class="tag">SQL</span>
+
+<span class="tag">Auth & RLS</span>
+
+<span class="tag">Storage</span>
+
+</div>
+
+</div>
+
+<div class="skill-card">
+
+<h4>Ferramentas & DevOps</h4>
+
+<div class="tags">
+
+<span class="tag">Git & GitHub</span>
+
+<span class="tag">Vercel</span>
+
+<span class="tag">Docker</span>
+
+<span class="tag">Postman</span>
+
+<span class="tag">CI/CD</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- SEÇÃO: EXPERIÊNCIA -->
+
+<section id="experiencia">
+
+<h2>Experiência Profissional</h2>
+
+<div class="timeline">
+
+<div class="timeline-item">
+
+<span class="timeline-date">2024 — Presente</span>
+
+<h3>Desenvolvedor Full Stack</h3>
+
+<span class="timeline-company">Projetos Corporativos & Consultoria Independente</span>
+
+<p>Desenvolvimento de arquiteturas escaláveis e integração de bancos de dados em nuvem (PostgreSQL/Supabase). Implementação de painéis administrativos, autenticação segura, automação de processos e otimização de performance front-end.</p>
+
+</div>
+
+<div class="timeline-item">
+
+<span class="timeline-date">2022 — 2024</span>
+
+<h3>Desenvolvedor Front-End / Web</h3>
+
+<span class="timeline-company">Soluções Digitais</span>
+
+<p>Criação de interfaces responsivas e acessíveis utilizando React, HTML5, CSS3 e JavaScript moderno. Padronização de componentes visuais (Design Systems) e consumo de APIs REST.</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- SEÇÃO: FORMAÇÃO & CERTIFICAÇÕES -->
+
+<section id="certificacoes">
+
+<h2>Formação & Certificações</h2>
+
+<div class="certs-grid">
+
+<div class="cert-card">
+
+<h4>Análise e Desenvolvimento de Sistemas</h4>
+
+<span class="cert-issuer">Ensino Superior</span>
+
+<span class="cert-year">Foco em Engenharia de Software e Banco de Dados</span>
+
+</div>
+
+<div class="cert-card">
+
+<h4>Arquitetura de Aplicações com Supabase</h4>
+
+<span class="cert-issuer">Cloud Tech Academy</span>
+
+<span class="cert-year">PostgreSQL, RLS, Auth & Edge Functions</span>
+
+</div>
+
+<div class="cert-card">
+
+<h4>Desenvolvimento Full Stack Moderno</h4>
+
+<span class="cert-issuer">Bootcamp Especializado</span>
+
+<span class="cert-year">React, Node.js, TypeScript e APIs</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- SEÇÃO: PROJETOS (Dinâmico via Supabase + Fallback) -->
+
+<section id="projetos">
+
+<h2>Projetos em Destaque</h2>
+
+<div id="lista-projetos">
+
+<p>Carregando projetos...</p>
+
+</div>
+
+</section>
+
+
+
+<!-- SEÇÃO: CONTATO -->
+
+<section id="contato">
+
+<h2>Vamos Trabalhar Juntos?</h2>
+
+<div class="form-container">
+
+<p style="margin-bottom: 1.5rem;">Tem uma ideia de projeto, vaga ou precisa de uma consultoria? Preencha o formulário abaixo para enviar uma mensagem diretamente para o meu painel.</p>
+
+<form id="form-contato">
+
+<div class="form-group">
+
+<label for="nome">Seu Nome</label>
+
+<input type="text" id="nome" placeholder="Ex: Ana Silva" required>
+
+</div>
+
+<div class="form-group">
+
+<label for="email">Seu E-mail</label>
+
+<input type="email" id="email" placeholder="nome@exemplo.com" required>
+
+</div>
+
+<div class="form-group">
+
+<label for="mensagem">Sua Mensagem</label>
+
+<textarea id="mensagem" rows="4" placeholder="Escreva os detalhes do seu projeto ou proposta..." required></textarea>
+
+</div>
+
+<button type="submit">Enviar Mensagem</button>
+
+</form>
+
+<p id="status-contato"></p>
+
+</div>
+
+</section>
+
+
+
+<!-- SEÇÃO: LOGIN NO SUPABASE -->
+
+<section id="area-login">
+
+<h2>Área Administrativa</h2>
+
+<div class="form-container">
+
+<p style="margin-bottom: 1.5rem;">Acesso restrito para gerenciar projetos e mensagens do portfólio.</p>
+
+
+<!-- Formulário de Login -->
+
+<form id="form-login">
+
+<div class="form-group">
+
+<label for="login-email">E-mail</label>
+
+<input type="email" id="login-email" placeholder="admin@email.com" required>
+
+</div>
+
+<div class="form-group">
+
+<label for="login-senha">Senha</label>
+
+<input type="password" id="login-senha" placeholder="••••••••" required>
+
+</div>
+
+<button type="submit">Acessar Painel</button>
+
+</form>
+
+
+
+<!-- Área exibida após o login -->
+
+<div id="painel-logado" style="display: none;">
+
+<p>Sessão ativa: <strong id="usuario-email"></strong></p>
+
+<button id="btn-sair">Encerrar Sessão</button>
+
+</div>
+
+
+
+<p id="status-login"></p>
+
+</div>
+
+</section>
+
+</main>
+
+
+
+<footer>
+
+<!-- Mini Logo MJ no Rodapé -->
+
+<svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<rect x="3" y="3" width="94" height="94" rx="22" fill="#111827" stroke="#1f2937" stroke-width="3"/>
+
+<path d="M22 74V26L42 51L62 26V74H53V42L42 56L31 42V74H22Z" fill="#38bdf8"/>
+
+<path d="M77 26V60C77 71 70 77 60 77C54 77 49 74 46 70L52 63C54 66 57 68 60 68C65 68 68 65 68 59V26H77Z" fill="#d4af37"/>
+
+</svg>
+
+<p>&copy; 2026 Michael Junio (MJ) — Desenvolvido com Supabase & Arquitetura Web Moderna.</p>
+
+</footer>
+
+
+
+<!-- LÓGICA DE INTEGRAÇÃO COM O SUPABASE -->
+
+<script>
+
+// 1. Inicialização do Supabase
+
+const SUPABASE_URL = 'SUA_URL_DO_SUPABASE';
+
+const SUPABASE_ANON_KEY = 'SUA_ANON_KEY';
+
+
+let supabaseClient = null;
+
+if (SUPABASE_URL !== 'SUA_URL_DO_SUPABASE' && SUPABASE_ANON_KEY !== 'SUA_ANON_KEY') {
+
+supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+}
+
+
+
+// Projetos de demonstração caso o Supabase ainda não esteja conectado
+
+const projetosExemplo = [
+
+{
+
+titulo: 'Sistema de Gestão SaaS',
+
+descricao: 'Plataforma completa com controle de usuários, dashboards financeiros em tempo real e autenticação segura com Supabase.',
+
+tecnologias: ['React', 'Supabase', 'PostgreSQL'],
+
+link: '#'
+
+},
+
+{
+
+titulo: 'API RESTful de E-commerce',
+
+descricao: 'Arquitetura backend escalável para gerenciamento de estoque, pedidos e integração com webhooks de pagamento.',
+
+tecnologias: ['Node.js', 'TypeScript', 'Express'],
+
+link: '#'
+
+},
+
+{
+
+titulo: 'Portal Administrativo & CRM',
+
+descricao: 'Interface moderna para acompanhamento de leads, histórico de contatos e relatórios automatizados.',
+
+tecnologias: ['JavaScript', 'CSS Grid', 'Supabase Auth'],
+
+link: '#'
+
+}
+
+];
+
+
+
+function renderizarProjetos(lista) {
+
+const container = document.getElementById('lista-projetos');
+
+container.innerHTML = '';
+
+
+
+lista.forEach(projeto => {
+
+const divCard = document.createElement('div');
+
+divCard.className = 'project-card';
+
+
+const tagsHtml = projeto.tecnologias
+
+? `<div class="project-tags">${projeto.tecnologias.map(t => `<span class="tag">${t}</span>`).join('')}</div>`
+
+: '';
+
+
+
+divCard.innerHTML = `
+
+<div>
+
+<h3>${projeto.titulo}</h3>
+
+<p>${projeto.descricao}</p>
+
+${tagsHtml}
+
+</div>
+
+${projeto.link ? `<a href="${projeto.link}" target="_blank">Acessar projeto &rarr;</a>` : ''}
+
+`;
+
+container.appendChild(divCard);
+
+});
+
+}
+
+
+
+// 2. Buscar e listar projetos do banco
+
+async function carregarProjetos() {
+
+if (!supabaseClient) {
+
+renderizarProjetos(projetosExemplo);
+
+return;
+
+}
+
+
+
+const container = document.getElementById('lista-projetos');
+
+const { data, error } = await supabaseClient
+
+.from('projetos')
+
+.select('*');
+
+
+
+if (error || !data || data.length === 0) {
+
+renderizarProjetos(projetosExemplo);
+
+return;
+
+}
+
+
+
+renderizarProjetos(data);
+
+}
+
+
+
+// 3. Enviar formulário de contato para o banco
+
+document.getElementById('form-contato').addEventListener('submit', async (e) => {
+
+e.preventDefault();
+
+const status = document.getElementById('status-contato');
+
+
+
+if (!supabaseClient) {
+
+status.textContent = 'Configure sua URL e Anon Key do Supabase no código para ativar o envio.';
+
+status.style.color = 'var(--gold)';
+
+return;
+
+}
+
+
+
+status.textContent = 'Enviando mensagem...';
+
+status.style.color = 'var(--text-muted)';
+
+
+
+const nome = document.getElementById('nome').value;
+
+const email = document.getElementById('email').value;
+
+const mensagem = document.getElementById('mensagem').value;
+
+
+
+const { error } = await supabaseClient
+
+.from('mensagens')
+
+.insert([{ nome, email, mensagem }]);
+
+
+
+if (error) {
+
+status.textContent = `Erro ao enviar: ${error.message}`;
+
+status.style.color = 'var(--error)';
+
+} else {
+
+status.textContent = 'Mensagem enviada com sucesso! Retornarei em breve.';
+
+status.style.color = 'var(--success)';
+
+e.target.reset();
+
+}
+
+});
+
+
+
+// 4. Autenticação (Login e Logout)
+
+const formLogin = document.getElementById('form-login');
+
+const painelLogado = document.getElementById('painel-logado');
+
+const statusLogin = document.getElementById('status-login');
+
+
+
+async function verificarSessao() {
+
+if (!supabaseClient) return;
+
+const { data: { session } } = await supabaseClient.auth.getSession();
+
+atualizarInterfaceAuth(session);
+
+}
+
+
+
+function atualizarInterfaceAuth(session) {
+
+if (session) {
+
+formLogin.style.display = 'none';
+
+painelLogado.style.display = 'flex';
+
+document.getElementById('usuario-email').textContent = session.user.email;
+
+} else {
+
+formLogin.style.display = 'block';
+
+painelLogado.style.display = 'none';
+
+document.getElementById('usuario-email').textContent = '';
+
+}
+
+}
+
+
+
+formLogin.addEventListener('submit', async (e) => {
+
+e.preventDefault();
+
+if (!supabaseClient) {
+
+statusLogin.textContent = 'Configure suas credenciais do Supabase no código primeiro.';
+
+statusLogin.style.color = 'var(--gold)';
+
+return;
+
+}
+
+
+
+statusLogin.textContent = 'Autenticando...';
+
+statusLogin.style.color = 'var(--text-muted)';
+
+
+
+const email = document.getElementById('login-email').value;
+
+const password = document.getElementById('login-senha').value;
+
+
+
+const { data, error } = await supabaseClient.auth.signInWithPassword({
+
+email,
+
+password
+
+});
+
+
+
+if (error) {
+
+statusLogin.textContent = `Credenciais inválidas: ${error.message}`;
+
+statusLogin.style.color = 'var(--error)';
+
+} else {
+
+statusLogin.textContent = '';
+
+e.target.reset();
+
+atualizarInterfaceAuth(data.session);
+
+}
+
+});
+
+
+
+document.getElementById('btn-sair').addEventListener('click', async () => {
+
+if (!supabaseClient) return;
+
+await supabaseClient.auth.signOut();
+
+atualizarInterfaceAuth(null);
+
+statusLogin.textContent = 'Sessão encerrada com sucesso.';
+
+statusLogin.style.color = 'var(--success)';
+
+});
+
+
+
+// Inicialização
+
+carregarProjet
